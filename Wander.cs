@@ -1,27 +1,50 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class Wander : SteeringBehaviourBase
 {
     public float WanderRadius = 10f;
     public float WanderDistance = 10f;
-    public float WanderJitter = 1f;
+    public float WanderJitter = 10f;
     Vector3 WanderTarget = Vector3.zero;
-    float WanderAngle = 0.0f;
-    [SerializeField]
-    private float maxTurnRadius;
+    float WanderAngleEnd = 0.0f;
+    float WanderAngleStart = 0.0f;
+    float WanderAngleCurrent = 0.0f;
+    float timer = 0;
 
     void Start()
     {
-        WanderAngle = Random.Range(0.0f, Mathf.PI * 2);
-        WanderTarget = new Vector3(Mathf.Cos(WanderAngle), 0, Mathf.Sin(WanderAngle)) * WanderRadius;
+        WanderAngleEnd = Random.Range(0.0f, Mathf.PI * 2);
+        WanderTarget = new Vector3(Mathf.Cos(WanderAngleEnd), 0, Mathf.Sin(WanderAngleEnd)) * WanderRadius;
     }
 
     public override Vector3 Calculate()
     {
-        Vector3 TrueAngle = 
-        WanderTarget = new Vector3(Mathf.Cos(WanderAngle), 0, Mathf.Sin(WanderAngle)) * WanderRadius;
+        //Debug.DrawLine(new Vector3(0f, 500f, 0f), Vector3.zero, Color.red, 1.0f, false);
+        timer += Time.deltaTime;
+        if(timer > 1)
+        {
+            timer = 0;
+            WanderAngleStart = WanderAngleCurrent;
+            float intermediateAngle = Random.Range(-WanderJitter, WanderJitter);
+            intermediateAngle += Random.Range(-WanderJitter, WanderJitter);
+            intermediateAngle *= 0.5f;
+            intermediateAngle = WanderJitter - Mathf.Abs(intermediateAngle);
+            WanderAngleEnd += Random.Range(-WanderJitter, WanderJitter);
+
+            Debug.Log("hit");
+        }
+        else
+        {
+            WanderAngleCurrent = Mathf.Lerp(WanderAngleStart, WanderAngleEnd, timer);
+            debugDrawAngle(WanderAngleCurrent, Color.yellow);
+            debugDrawAngle(WanderAngleEnd, Color.red);
+            debugDrawAngle(WanderAngleStart, Color.green);
+        }
+
+        WanderTarget = new Vector3(Mathf.Cos(WanderAngleCurrent), 0, Mathf.Sin(WanderAngleCurrent)) * WanderRadius;
+
+        Vector3 targetLocal = WanderTarget;
 
         Vector3 targetWorld = transform.position + WanderTarget;
 
@@ -29,10 +52,18 @@ public class Wander : SteeringBehaviourBase
 
         return targetWorld - transform.position;
     }
-
-    IEnumerator updateWanderPosition()
+    private void debugDrawAngle(float angle, Color color)
     {
-        yield return new WaitForSeconds(1.0f);
-        WanderAngle += Random.Range(-WanderJitter, WanderJitter);
+        Vector3 tempTarget = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * WanderRadius;
+
+        Vector3 tempTargetWorld = transform.position + tempTarget;
+
+        //targetWorld += transform.forward * WanderDistance;
+
+        //return targetWorld - transform.position;
+
+        Debug.DrawLine(transform.position, tempTargetWorld, color, .01f);
     }
+
 }
+

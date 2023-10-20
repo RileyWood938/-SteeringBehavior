@@ -29,15 +29,16 @@ public class Vehicle : MonoBehaviour {
     public float MaxTurnRate = 1.0f;
 
     private SteeringBehaviourBase[] SteeringBehaviors;
+
     private void Start()
     {
         //.Get components returns a reliably ordered top-to-bottom list of all the SteeringBehaviors in the editor
         SteeringBehaviors = GetComponents<SteeringBehaviourBase>();
     }
-
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
+
         Vector3 SteeringForce = Vector3.zero;
 
         //Get all steering behaviours attached to this object and add their calculated steering force onto this SteeringForce
@@ -46,7 +47,7 @@ public class Vehicle : MonoBehaviour {
         {
             Vector3 inputForce = i.Calculate() * i.getWeight();
 
-            if((SteeringForce + inputForce).magnitude > MaxForce)
+            if ((SteeringForce + inputForce).magnitude > MaxForce)
             {
                 Vector3.ClampMagnitude(inputForce, (MaxForce - inputForce.magnitude));
                 SteeringForce += inputForce;
@@ -70,7 +71,8 @@ public class Vehicle : MonoBehaviour {
 
             transform.forward = Velocity.normalized;
         }
+        Debug.DrawLine(transform.position, transform.position + transform.forward, Color.red, 0.1f);
 
         //transform.right should update on its own once we update the transform.forward
-	}
+    }
 }

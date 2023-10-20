@@ -18,5 +18,5 @@ public abstract class SteeringBehaviourBase : MonoBehaviour
     {
         return Weight;
     }
-    
+
 }
