@@ -8,7 +8,7 @@ public class Flee : SteeringBehaviourBase
     public override Vector3 Calculate()
     {
         Vehicle vehicle = GetComponent<Vehicle>();
-        Vector3 DesiredVelocity = (SeekTargetPos + transform.position).normalized * vehicle.MaxSpeed;
+        Vector3 DesiredVelocity = (-SeekTargetPos + transform.position).normalized * vehicle.MaxSpeed;
 
         return (DesiredVelocity - vehicle.Velocity);
     }

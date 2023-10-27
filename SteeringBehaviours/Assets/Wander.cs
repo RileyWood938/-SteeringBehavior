@@ -5,12 +5,12 @@ public class Wander : SteeringBehaviourBase
 {
     public float WanderRadius = 10f;
     public float WanderDistance = 10f;
-    public float WanderJitter = 10f;
+    public float WanderJitter = 0.2f;
     Vector3 WanderTarget = Vector3.zero;
-    float WanderAngleEnd = 0.0f;
-    float WanderAngleStart = 0.0f;
-    float WanderAngleCurrent = 0.0f;
-    float timer = 0;
+    private float WanderAngleEnd = 0.0f;
+    private float WanderAngleStart = 0.0f;
+    private float WanderAngleCurrent = 0.0f;
+    private float timer = 0;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class Wander : SteeringBehaviourBase
             WanderAngleStart = WanderAngleCurrent;
             WanderAngleEnd += Random.Range(-WanderJitter, WanderJitter);
 
-            Debug.Log("hit");
+            //Debug.Log("hit");
         }
         else
         {
@@ -39,8 +39,6 @@ public class Wander : SteeringBehaviourBase
         }
 
         WanderTarget = new Vector3(Mathf.Cos(WanderAngleCurrent), 0, Mathf.Sin(WanderAngleCurrent)) * WanderRadius;
-
-        Vector3 targetLocal = WanderTarget;
 
         Vector3 targetWorld = transform.position + WanderTarget;
 

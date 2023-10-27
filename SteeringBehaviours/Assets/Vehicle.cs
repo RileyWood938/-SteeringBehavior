@@ -26,7 +26,7 @@ public class Vehicle : MonoBehaviour {
     public float MaxForce = 1;
 
     //We use this to determine how fast the agent can turn, but just ignore it for, we won't be using it
-    public float MaxTurnRate = 1.0f;
+    public float MaxTurnRate = 0.005f;
 
     private SteeringBehaviourBase[] SteeringBehaviors;
 
@@ -68,7 +68,13 @@ public class Vehicle : MonoBehaviour {
         {
             transform.position += Velocity * Time.deltaTime;
 
-            transform.forward = Velocity.normalized;
+            Vector3 desiredHeading = Velocity.normalized;
+            Vector3 trueHeading = desiredHeading;
+            if (Vector3.Angle(transform.forward, desiredHeading) > Mathf.Rad2Deg*MaxTurnRate)
+            {
+                trueHeading = Vector3.RotateTowards(transform.forward, desiredHeading, MaxTurnRate, 0.0f);
+            }
+            transform.forward = trueHeading;
         }
 
         //transform.right should update on its own once we update the transform.forward
