@@ -378,6 +378,7 @@
 "Assets/Seek.cs"
 "Assets/SteeringBehaviourBase.cs"
 "Assets/Vehicle.cs"
+"Assets/WallAvoidance.cs"
 "Assets/Wander.cs"
 -langversion:9.0
 
