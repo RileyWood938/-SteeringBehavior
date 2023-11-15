@@ -20,15 +20,12 @@ public class Wander : SteeringBehaviourBase
 
     public override Vector3 Calculate()
     {
-        //Debug.DrawLine(new Vector3(0f, 500f, 0f), Vector3.zero, Color.red, 1.0f, false);
         timer += Time.deltaTime;
         if(timer > 1)
         {
             timer = 0;
             WanderAngleStart = WanderAngleCurrent;
             WanderAngleEnd += Random.Range(-WanderJitter, WanderJitter);
-
-            //Debug.Log("hit");
         }
         else
         {

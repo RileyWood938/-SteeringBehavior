@@ -69,14 +69,20 @@ public class Vehicle : MonoBehaviour {
             transform.position += Velocity * Time.deltaTime;
 
             Vector3 desiredHeading = Velocity.normalized;
-            Vector3 trueHeading = desiredHeading;
-            if (Vector3.Angle(transform.forward, desiredHeading) > Mathf.Rad2Deg*MaxTurnRate)
-            {
-                trueHeading = Vector3.RotateTowards(transform.forward, desiredHeading, MaxTurnRate, 0.0f);
-            }
-            transform.forward = trueHeading;
+            desiredHeading = ApplyAngleLimit(desiredHeading);
+            transform.forward = desiredHeading;
         }
 
         //transform.right should update on its own once we update the transform.forward
     }
+    Vector3 ApplyAngleLimit(Vector3 inputHeadingDesire)
+    {
+        if (Vector3.Angle(transform.forward, inputHeadingDesire) > Mathf.Rad2Deg * MaxTurnRate)
+        {
+            return Vector3.RotateTowards(transform.forward, inputHeadingDesire, MaxTurnRate, 0.0f);
+        }
+        return inputHeadingDesire;
+    }
 }
+
+
